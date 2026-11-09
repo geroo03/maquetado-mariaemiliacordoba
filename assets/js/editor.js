@@ -1,8 +1,9 @@
 // Panel "Editar mi sitio".
-// Guarda los cambios como borrador en este navegador (localStorage) y deja descargar
-// contenido.json para que Sebastián lo suba al repositorio. No hay servidor: nada se
-// publica solo, a propósito, porque esto es un maquetado para revisar.
+// Guarda los cambios como borrador en este navegador (localStorage). Para publicarlos,
+// Emilia usa el botón "Publicar" (sube data/contenido.json al repo con su token,
+// ver github.js) o descarga el archivo y se lo manda a Sebastián.
 import { PALETAS, LETRAS, contraste, leerBorrador, guardarBorrador, borrarBorrador, cargarPublicado } from "./contenido.js";
+import { REPO, leerToken, guardarToken, publicar } from "./github.js";
 
 let datos = null;
 
@@ -346,10 +347,11 @@ const PESTANAS = {
     });
     return [
       h("h2", {}, "Tus cambios"),
-      h("p", { class: "ayuda" }, "Todo lo que cambiás se guarda solo en este navegador. Nadie más lo ve hasta que se publica."),
-      h("h2", {}, "1. Descargá el archivo"),
-      h("p", { class: "ayuda" }, "Se baja un archivo “contenido.json” con todos tus textos, colores y fotos. Mandáselo a Sebastián por WhatsApp o mail y él lo publica."),
-      h("button", { class: "b principal", type: "button", onclick: descargar }, "Descargar contenido.json"),
+      h("p", { class: "ayuda" }, "Todo lo que cambiás se guarda solo en este navegador. Nadie más lo ve hasta que lo publicás."),
+      ...bloquePublicar(),
+      h("h2", {}, "Descargar el archivo"),
+      h("p", { class: "ayuda" }, "Otra opción: bajá “contenido.json” con todos tus textos, colores y fotos y mandáselo a Sebastián."),
+      h("button", { class: "b", type: "button", onclick: descargar }, "Descargar contenido.json"),
       h("h2", {}, "Abrir un archivo"),
       h("p", { class: "ayuda" }, "Si tenés un contenido.json guardado (por ejemplo, desde otra compu), cargalo acá."),
       archivo,
@@ -363,6 +365,43 @@ const PESTANAS = {
     ];
   },
 };
+
+function bloquePublicar() {
+  const token = h("input", { type: "password", autocomplete: "off", spellcheck: "false", value: leerToken(), placeholder: "github_pat_…" });
+  const recordar = h("input", { type: "checkbox", checked: Boolean(leerToken()) });
+  const resultado = h("p", { class: "ayuda", role: "status" });
+  const boton = h("button", { class: "b principal", type: "button" }, "Publicar en el sitio");
+  boton.addEventListener("click", async () => {
+    const valor = token.value.trim();
+    if (!/^(github_pat_|ghp_)[A-Za-z0-9_]+$/.test(valor)) {
+      resultado.textContent = "Pegá la clave de publicación que te pasó Sebastián (empieza con github_pat_).";
+      return;
+    }
+    if (!confirm("Tus cambios van a quedar publicados en el sitio. ¿Seguir?")) return;
+    guardarToken(recordar.checked ? valor : "");
+    boton.disabled = true;
+    resultado.textContent = "Publicando…";
+    try {
+      await publicar(datos, valor);
+      resultado.replaceChildren("Listo. El sitio se actualiza en 1 o 2 minutos. ",
+        h("a", { href: "index.html", target: "_blank", rel: "noopener" }, "Ver el sitio"));
+    } catch (error) {
+      resultado.textContent = error.message || "No se pudo publicar. Revisá tu conexión.";
+    } finally {
+      boton.disabled = false;
+    }
+  });
+  return [
+    h("h2", {}, "Publicar"),
+    h("p", { class: "ayuda" }, `Guarda tus cambios directo en el sitio (repositorio ${REPO.duenio}/${REPO.nombre}).`),
+    h("label", { class: "c" }, h("span", {}, "Clave de publicación"), token,
+      h("small", {}, "Te la pasa Sebastián. No la compartas: con ella se puede cambiar el sitio.")),
+    h("label", { class: "c-check" }, recordar, "Recordarla en esta compu"),
+    h("p", { class: "ayuda" }, "Si usás una compu compartida, dejá esto destildado."),
+    boton,
+    resultado,
+  ];
+}
 
 function descargar() {
   const blob = new Blob([JSON.stringify(datos, null, 2)], { type: "application/json" });

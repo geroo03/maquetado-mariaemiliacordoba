@@ -21,11 +21,26 @@ Está marcado con `noindex` para que Google no lo indexe mientras tenga datos de
 1. Entra a `editar.html`.
 2. Cambia colores (paletas o selector), letras, datos de contacto, textos, propiedades, fotos, opiniones y preguntas. Ve los cambios al instante en la vista previa (compu o celular).
 3. Los cambios quedan como **borrador en su navegador** (nadie más los ve).
-4. En la pestaña **Guardar** descarga `contenido.json` y se lo manda a Sebastián.
+4. En la pestaña **Guardar** toca **Publicar en el sitio** (necesita la clave de publicación) o descarga `contenido.json` y se lo manda a Sebastián.
+
+### Clave de publicación (token de GitHub)
+
+El botón "Publicar" sube `data/contenido.json` a `main` con la API de GitHub, desde el navegador. Para eso usa un token que **nunca** va en el código ni en el repo: Emilia lo pega en el editor y, si quiere, queda guardado solo en su navegador.
+
+Cómo crearlo (lo hace el dueño del repo): GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → Generate new token.
+- Repository access: **Only select repositories** → `maquetado-mariaemiliacordoba`.
+- Permissions → Repository permissions → **Contents: Read and write** (nada más).
+- Expiration: la más corta que sea cómoda (por ejemplo 90 días).
+
+Riesgos: quien tenga el token puede cambiar archivos de este repo (no de otros). Si se pierde o se filtra, revocarlo en la misma pantalla. Cada publicación queda como un commit, así que cualquier cambio se puede deshacer.
+
+Alternativa sin token en el navegador: Decap CMS con login de GitHub (OAuth). Requiere una app OAuth y un pequeño servidor intermedio (por ejemplo, un Worker gratis de Cloudflare), y Emilia necesitaría cuenta de GitHub con acceso al repo.
 
 Lo que está entre `[corchetes]` aparece resaltado en amarillo: falta completarlo.
 
 ## Cómo publica Sebastián
+
+Si Emilia usa "Publicar", no hay que hacer nada. Si manda el archivo:
 
 1. Reemplazar `data/contenido.json` por el archivo que mandó Emilia.
 2. Commit y push a `main`. GitHub Pages (publicación desde la rama `main`) actualiza el sitio en un par de minutos.
