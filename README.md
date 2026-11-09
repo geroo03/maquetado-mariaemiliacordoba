@@ -28,7 +28,7 @@ Lo que está entre `[corchetes]` aparece resaltado en amarillo: falta completarl
 ## Cómo publica Sebastián
 
 1. Reemplazar `data/contenido.json` por el archivo que mandó Emilia.
-2. Commit y push a `main`. GitHub Actions publica el sitio en GitHub Pages en un par de minutos.
+2. Commit y push a `main`. GitHub Pages (publicación desde la rama `main`) actualiza el sitio en un par de minutos.
 
 Las fotos que sube Emilia vienen dentro del JSON (achicadas a 1400 px, JPEG). Para producción conviene sacarlas a archivos en `assets/img/` y referenciarlas por ruta.
 
