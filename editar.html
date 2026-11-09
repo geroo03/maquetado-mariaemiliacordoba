@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editar mi sitio</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="assets/css/editor.css">
+  <script type="module" src="assets/js/editor.js"></script>
+</head>
+<body>
+  <div class="editor">
+    <aside class="panel">
+      <header class="panel-cabeza">
+        <h1>Editar mi sitio</h1>
+        <p id="estado" class="estado" role="status">Cargando…</p>
+      </header>
+      <nav class="pestanas" id="pestanas" role="tablist" aria-label="Secciones"></nav>
+      <div id="formulario" class="formulario-editor"></div>
+    </aside>
+    <section class="vista">
+      <div class="vista-barra">
+        <label>Ver página
+          <select id="pagina">
+            <option value="index.html">Inicio</option>
+            <option value="propiedades.html">Propiedades</option>
+            <option value="sobre-mi.html">Sobre mí</option>
+            <option value="tasacion.html">Tasación</option>
+            <option value="gracias.html">Gracias</option>
+          </select>
+        </label>
+        <div class="tamanos" role="group" aria-label="Tamaño de pantalla">
+          <button type="button" data-ancho="100%" aria-pressed="true">Compu</button>
+          <button type="button" data-ancho="390px" aria-pressed="false">Celular</button>
+        </div>
+        <a id="abrir" href="index.html" target="_blank" rel="noopener">Abrir en otra pestaña ↗</a>
+      </div>
+      <div class="marco-vista"><iframe id="vista" title="Vista previa del sitio" src="index.html"></iframe></div>
+    </section>
+  </div>
+</body>
+</html>
