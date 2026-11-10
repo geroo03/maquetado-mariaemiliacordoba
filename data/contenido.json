@@ -34,48 +34,87 @@
     "texto": "Te atiendo yo, de principio a fin: la tasación, las fotos, las visitas y los papeles hasta la escritura. Sin vueltas y con números claros.",
     "botonPrincipal": "Pedí tu tasación",
     "botonSecundario": "Ver propiedades",
-    "foto": "",
+    "foto": "assets/img/emilia.jpg",
     "notaFoto": "[Completar: una frase corta tuya, como la dirías en persona]"
   },
   "servicios": {
     "titulo": "Qué hago con tu propiedad",
     "texto": "Cada propiedad es distinta. Esto es lo que hago siempre, y lo ajustamos juntos.",
     "items": [
-      { "titulo": "Fotos de la propiedad", "texto": "Fotos cuidadas, con buena luz y la casa ordenada, para que se vea como es." },
-      { "titulo": "Video para redes", "texto": "Un recorrido corto en formato vertical para Instagram y WhatsApp." },
-      { "titulo": "Publicación en portales", "texto": "[Completar: en qué portales publicás]" },
-      { "titulo": "Difusión en Instagram", "texto": "La muestro en mis redes y a las personas que ya me consultaron por algo parecido." }
+      {
+        "titulo": "Fotos de la propiedad",
+        "texto": "Fotos cuidadas, con buena luz y la casa ordenada, para que se vea como es."
+      },
+      {
+        "titulo": "Video para redes",
+        "texto": "Un recorrido corto en formato vertical para Instagram y WhatsApp."
+      },
+      {
+        "titulo": "Publicación en portales",
+        "texto": "[Completar: en qué portales publicás]"
+      },
+      {
+        "titulo": "Difusión en Instagram",
+        "texto": "La muestro en mis redes y a las personas que ya me consultaron por algo parecido."
+      }
     ]
   },
   "pasos": {
     "titulo": "Cómo trabajo",
     "items": [
-      { "titulo": "Tasación", "texto": "Visito la propiedad, miro qué se publica y qué se vende en la zona, y te doy un valor con fundamentos." },
-      { "titulo": "Plan de difusión", "texto": "Fotos, video y dónde se va a publicar. Lo ves antes de que salga." },
-      { "titulo": "Visitas coordinadas", "texto": "Hablo antes con cada interesado para que vengan solo quienes de verdad pueden comprar." },
-      { "titulo": "Reserva y escritura", "texto": "Te acompaño en la negociación, la reserva y la firma con el escribano." }
+      {
+        "titulo": "Tasación",
+        "texto": "Visito la propiedad, miro qué se publica y qué se vende en la zona, y te doy un valor con fundamentos."
+      },
+      {
+        "titulo": "Plan de difusión",
+        "texto": "Fotos, video y dónde se va a publicar. Lo ves antes de que salga."
+      },
+      {
+        "titulo": "Visitas coordinadas",
+        "texto": "Hablo antes con cada interesado para que vengan solo quienes de verdad pueden comprar."
+      },
+      {
+        "titulo": "Reserva y escritura",
+        "texto": "Te acompaño en la negociación, la reserva y la firma con el escribano."
+      }
     ]
   },
   "sobreMi": {
     "titulo": "Hola, soy Emilia",
     "subtitulo": "[Completar: cómo te presentás en una línea]",
-    "foto": "",
+    "foto": "assets/img/emilia.jpg",
     "historia": [
       "[Completar: cómo empezaste en esto]",
       "[Completar: qué te importa cuando trabajás con un propietario]",
       "[Completar: algo personal que te represente (barrio, familia, una costumbre)]"
     ],
     "valores": [
-      { "titulo": "Te atiendo yo", "texto": "No te paso de mano en mano: hablás siempre conmigo." },
-      { "titulo": "Números claros", "texto": "Te explico de dónde sale cada valor y cada costo." },
-      { "titulo": "Te aviso todo", "texto": "Después de cada visita te cuento cómo fue." }
+      {
+        "titulo": "Te atiendo yo",
+        "texto": "No te paso de mano en mano: hablás siempre conmigo."
+      },
+      {
+        "titulo": "Números claros",
+        "texto": "Te explico de dónde sale cada valor y cada costo."
+      },
+      {
+        "titulo": "Te aviso todo",
+        "texto": "Después de cada visita te cuento cómo fue."
+      }
     ]
   },
   "zonas": {
     "titulo": "Dónde trabajo",
     "items": [
-      { "nombre": "Córdoba Capital", "texto": "[Completar: barrios donde más trabajás]" },
-      { "nombre": "Buenos Aires", "texto": "[Completar: zonas]" }
+      {
+        "nombre": "Córdoba Capital",
+        "texto": "[Completar: barrios donde más trabajás]"
+      },
+      {
+        "nombre": "Buenos Aires",
+        "texto": "[Completar: zonas]"
+      }
     ]
   },
   "propiedades": [
@@ -97,7 +136,10 @@
       "banos": "1",
       "cocheras": "0",
       "descripcion": "Esta es una propiedad de ejemplo para ver cómo queda el sitio. Reemplazala por una real desde el editor.",
-      "caracteristicas": ["Balcón", "Luminoso"],
+      "caracteristicas": [
+        "Balcón",
+        "Luminoso"
+      ],
       "fotos": []
     },
     {
@@ -118,7 +160,10 @@
       "banos": "2",
       "cocheras": "1",
       "descripcion": "Esta es una propiedad de ejemplo. Reemplazala por una real desde el editor.",
-      "caracteristicas": ["Patio", "Parrilla"],
+      "caracteristicas": [
+        "Patio",
+        "Parrilla"
+      ],
       "fotos": []
     },
     {
@@ -147,11 +192,26 @@
   "preguntas": {
     "titulo": "Preguntas frecuentes",
     "items": [
-      { "pregunta": "¿Cuánto cobrás de honorarios?", "respuesta": "[Completar por Emilia]" },
-      { "pregunta": "¿Trabajás con exclusividad?", "respuesta": "[Completar por Emilia]" },
-      { "pregunta": "¿Cuánto tarda en venderse una propiedad?", "respuesta": "[Completar por Emilia]" },
-      { "pregunta": "¿En qué portales publicás?", "respuesta": "[Completar por Emilia]" },
-      { "pregunta": "¿Qué documentación necesito para vender?", "respuesta": "[Completar por Emilia]" }
+      {
+        "pregunta": "¿Cuánto cobrás de honorarios?",
+        "respuesta": "[Completar por Emilia]"
+      },
+      {
+        "pregunta": "¿Trabajás con exclusividad?",
+        "respuesta": "[Completar por Emilia]"
+      },
+      {
+        "pregunta": "¿Cuánto tarda en venderse una propiedad?",
+        "respuesta": "[Completar por Emilia]"
+      },
+      {
+        "pregunta": "¿En qué portales publicás?",
+        "respuesta": "[Completar por Emilia]"
+      },
+      {
+        "pregunta": "¿Qué documentación necesito para vender?",
+        "respuesta": "[Completar por Emilia]"
+      }
     ]
   },
   "tasacion": {
