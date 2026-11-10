@@ -43,11 +43,25 @@ export async function cargarPublicado() {
   return respuesta.json();
 }
 
-/** Devuelve el borrador local si existe; si no, lo publicado. */
+/** Huella corta del contenido publicado: sirve para saber si un borrador quedó viejo. */
+export function huella(datos) {
+  const texto = JSON.stringify({ ...datos, _base: undefined });
+  let h = 5381;
+  for (let i = 0; i < texto.length; i++) h = ((h * 33) ^ texto.charCodeAt(i)) >>> 0;
+  return `${texto.length}-${h.toString(36)}`;
+}
+
+/**
+ * Usa el borrador local solo si se armó sobre la versión publicada actual.
+ * Si después se publicó algo nuevo (por ejemplo, una foto subida al repo),
+ * el borrador viejo no lo tapa: se muestra lo publicado y se avisa.
+ */
 export async function cargarContenido() {
+  const publicado = await cargarPublicado();
   const borrador = leerBorrador();
-  if (borrador) return { datos: borrador, esBorrador: true };
-  return { datos: await cargarPublicado(), esBorrador: false };
+  if (!borrador) return { datos: publicado, esBorrador: false, borradorViejo: false };
+  if (borrador._base !== huella(publicado)) return { datos: publicado, esBorrador: false, borradorViejo: true };
+  return { datos: borrador, esBorrador: true, borradorViejo: false };
 }
 
 // --- Contraste (WCAG) para elegir texto blanco o negro sobre el acento ---

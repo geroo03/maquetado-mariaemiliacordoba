@@ -2,10 +2,12 @@
 // Guarda los cambios como borrador en este navegador (localStorage). Para publicarlos,
 // Emilia usa el botón "Publicar" (sube data/contenido.json al repo con su token,
 // ver github.js) o descarga el archivo y se lo manda a Sebastián.
-import { PALETAS, LETRAS, contraste, leerBorrador, guardarBorrador, borrarBorrador, cargarPublicado } from "./contenido.js";
+import { PALETAS, LETRAS, contraste, leerBorrador, guardarBorrador, borrarBorrador, cargarPublicado, huella } from "./contenido.js";
 import { REPO, leerToken, guardarToken, publicar } from "./github.js";
 
 let datos = null;
+// Huella de la versión publicada sobre la que se está editando (ver huella() en contenido.js).
+let basePublicada = "";
 
 // ---------- Utilidades ----------
 function h(etiqueta, atributos = {}, ...hijos) {
@@ -44,6 +46,7 @@ function cambio({ refrescar = true } = {}) {
   estado.textContent = "Guardando…";
   temporizador = setTimeout(() => {
     try {
+      datos._base = basePublicada;
       guardarBorrador(datos);
       const kb = Math.round(JSON.stringify(datos).length / 1024);
       estado.textContent = `Borrador guardado en esta compu (${kb} KB).${kb > 3500 ? " Ojo: muchas fotos, puede llenarse." : ""}`;
@@ -359,7 +362,7 @@ const PESTANAS = {
       h("p", { class: "ayuda" }, "Borra tu borrador y vuelve a lo que está publicado."),
       h("button", { class: "b peligro", type: "button", onclick: async () => {
         if (!confirm("Se pierden los cambios que no descargaste. ¿Seguir?")) return;
-        borrarBorrador(); datos = await cargarPublicado(); refrescarVista(); mostrar("Colores");
+        borrarBorrador(); datos = await cargarPublicado(); basePublicada = huella(datos); refrescarVista(); mostrar("Colores");
         estado.textContent = "Volviste a la versión publicada.";
       } }, "Descartar mi borrador"),
     ];
@@ -382,7 +385,8 @@ function bloquePublicar() {
     boton.disabled = true;
     resultado.textContent = "Publicando…";
     try {
-      await publicar(datos, valor);
+      const { _base, ...limpio } = datos;
+      await publicar(limpio, valor);
       resultado.replaceChildren("Listo. El sitio se actualiza en 1 o 2 minutos. ",
         h("a", { href: "index.html", target: "_blank", rel: "noopener" }, "Ver el sitio"));
     } catch (error) {
@@ -404,7 +408,8 @@ function bloquePublicar() {
 }
 
 function descargar() {
-  const blob = new Blob([JSON.stringify(datos, null, 2)], { type: "application/json" });
+  const { _base, ...limpio } = datos;
+  const blob = new Blob([JSON.stringify(limpio, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const enlace = h("a", { href: url, download: "contenido.json" });
   document.body.append(enlace); enlace.click(); enlace.remove();
@@ -441,9 +446,22 @@ for (const boton of document.querySelectorAll(".tamanos button")) {
 // ---------- Inicio ----------
 async function iniciar() {
   try {
+    const publicado = await cargarPublicado();
+    basePublicada = huella(publicado);
     const borrador = leerBorrador();
-    datos = borrador ?? await cargarPublicado();
-    estado.textContent = borrador ? "Seguís con tu borrador guardado en esta compu." : "Mostrando lo publicado. Tus cambios se guardan solos.";
+    datos = borrador ?? publicado;
+    if (!borrador) {
+      estado.textContent = "Mostrando lo publicado. Tus cambios se guardan solos.";
+    } else if (borrador._base !== basePublicada) {
+      estado.replaceChildren("Ojo: se publicó algo nuevo después de tu borrador. Si seguís editando, tu borrador reemplaza lo publicado. ",
+        h("button", { class: "b", type: "button", onclick: () => {
+          if (!confirm("Se pierden los cambios de tu borrador. ¿Usar la versión publicada?")) return;
+          borrarBorrador(); datos = publicado; refrescarVista(); mostrar("Colores");
+          estado.textContent = "Ahora estás con la versión publicada.";
+        } }, "Usar la versión publicada"));
+    } else {
+      estado.textContent = "Seguís con tu borrador guardado en esta compu.";
+    }
     for (const nombre of Object.keys(PESTANAS)) {
       pestanas.append(h("button", { type: "button", role: "tab", onclick: () => mostrar(nombre) }, nombre));
     }

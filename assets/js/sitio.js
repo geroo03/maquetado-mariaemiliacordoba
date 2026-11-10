@@ -362,11 +362,12 @@ async function iniciar() {
   const pagina = document.body.dataset.pagina;
   const raiz = document.getElementById("app");
   try {
-    const { datos, esBorrador } = await cargarContenido();
+    const { datos, esBorrador, borradorViejo } = await cargarContenido();
     aplicarTema(datos.tema);
     const enEditor = window.self !== window.top;
     raiz.replaceChildren(
       esBorrador && !enEditor ? h("div", { class: "aviso-borrador" }, "Estás viendo tu borrador (solo se ve en esta compu). ", h("a", { href: "editar.html" }, "Seguir editando")) : "",
+      borradorViejo && !enEditor ? h("div", { class: "aviso-borrador" }, "Hay una versión publicada más nueva que tu borrador: estás viendo la publicada. ", h("a", { href: "editar.html" }, "Revisar en el editor")) : "",
       encabezado(datos, ARCHIVO[pagina]),
       h("main", {}, RENDER[pagina](datos)),
       pie(datos),
