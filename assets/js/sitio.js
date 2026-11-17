@@ -1,7 +1,7 @@
 // Arma cada página a partir de data/contenido.json (o del borrador de Emilia).
 // Todo el texto se inserta con textContent: el contenido puede venir de un archivo
 // importado, así que nunca se interpreta como HTML.
-import { cargarContenido, aplicarTema } from "./contenido.js";
+import { cargarContenido, aplicarTema, archivoPropiedad } from "./contenido.js";
 
 // ---------- Utilidades ----------
 function h(etiqueta, atributos = {}, ...hijos) {
@@ -111,8 +111,18 @@ function botonWhatsappFlotante(d) {
 }
 
 // ---------- Bloques reutilizables ----------
+// En producción cada propiedad tiene su propia página generada (propiedad-<id>.html),
+// que es la que muestra foto y título al compartir el link. Con un borrador abierto
+// se usa la versión con ?id=, porque una propiedad nueva todavía no tiene página.
+let enlacesEstaticos = false;
+
+function enlacePropiedad(p) {
+  const archivo = enlacesEstaticos ? archivoPropiedad(p.id) : null;
+  return archivo ?? `propiedad.html?id=${encodeURIComponent(p.id)}`;
+}
+
 function tarjetaPropiedad(p) {
-  const href = `propiedad.html?id=${encodeURIComponent(p.id)}`;
+  const href = enlacePropiedad(p);
   const datos = [
     p.superficie && `${p.superficie} m²`,
     p.ambientes && `${p.ambientes} amb.`,
@@ -232,7 +242,7 @@ function paginaPropiedades(d) {
 }
 
 function paginaPropiedad(d) {
-  const id = new URLSearchParams(location.search).get("id");
+  const id = document.body.dataset.id || new URLSearchParams(location.search).get("id");
   const p = d.propiedades.find((x) => x.id === id);
   if (!p) {
     return [seccion("", h("h1", { class: "titulo-seccion" }, "No encontramos esa propiedad"),
@@ -348,6 +358,13 @@ function paginaTasacion(d) {
   ];
 }
 
+function paginaNoEncontrada() {
+  return [seccion("", h("span", { class: "antetitulo" }, "Error 404"),
+    h("h1", { class: "titulo-seccion" }, "No encontramos esta página"),
+    h("p", { class: "bajada-seccion" }, "Puede que el link esté mal escrito o que la página ya no exista."),
+    h("div", { class: "botones", style: "margin-top:32px" }, h("a", { class: "boton", href: "index.html" }, "Volver al inicio"), h("a", { class: "boton secundario", href: "propiedades.html" }, "Ver propiedades")))];
+}
+
 function paginaGracias(d) {
   return [seccion("", h("span", { class: "antetitulo" }, "Listo"),
     h("h1", { class: "titulo-seccion" }, "Gracias por escribirme"),
@@ -355,7 +372,7 @@ function paginaGracias(d) {
     h("div", { class: "botones", style: "margin-top:32px" }, h("a", { class: "boton", href: "propiedades.html" }, "Ver propiedades"), h("a", { class: "boton secundario", href: "index.html" }, "Volver al inicio")))];
 }
 
-const RENDER = { inicio: paginaInicio, propiedades: paginaPropiedades, propiedad: paginaPropiedad, "sobre-mi": paginaSobreMi, tasacion: paginaTasacion, gracias: paginaGracias };
+const RENDER = { inicio: paginaInicio, propiedades: paginaPropiedades, propiedad: paginaPropiedad, "sobre-mi": paginaSobreMi, tasacion: paginaTasacion, gracias: paginaGracias, "no-encontrada": paginaNoEncontrada };
 const ARCHIVO = { inicio: "index.html", propiedades: "propiedades.html", "sobre-mi": "sobre-mi.html" };
 
 async function iniciar() {
@@ -363,6 +380,7 @@ async function iniciar() {
   const raiz = document.getElementById("app");
   try {
     const { datos, esBorrador, borradorViejo } = await cargarContenido();
+    enlacesEstaticos = document.body.dataset.estatico === "si" && !esBorrador;
     aplicarTema(datos.tema);
     const enEditor = window.self !== window.top;
     raiz.replaceChildren(
@@ -372,11 +390,13 @@ async function iniciar() {
       h("main", {}, RENDER[pagina](datos)),
       pie(datos),
       botonWhatsappFlotante(datos) ?? "");
-    if (pagina !== "propiedad") document.title = `${datos.marca.nombre} · ${document.title}`;
+    // La página generada ya trae el título armado: no se le vuelve a anteponer la marca.
+    if (pagina !== "propiedad" && !document.title.startsWith(datos.marca.nombre)) document.title = `${datos.marca.nombre} · ${document.title}`;
   } catch (error) {
     console.error(error);
     raiz.replaceChildren(h("p", { class: "cargando" }, "No se pudo cargar la página. Probá recargar."));
   }
 }
 
-iniciar();
+/** La usa scripts/build.mjs para esperar a que la página termine de armarse. */
+export const listo = iniciar();

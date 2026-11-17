@@ -20,6 +20,14 @@ export const LETRAS = {
 
 const HEX = /^#[0-9a-fA-F]{6}$/;
 
+/**
+ * Nombre de la página generada de una propiedad (la arma scripts/build.mjs).
+ * Solo ids simples tienen página propia; el resto usa propiedad.html?id=.
+ */
+export function archivoPropiedad(id) {
+  return /^[a-z0-9-]+$/i.test(id ?? "") ? `propiedad-${id.toLowerCase()}.html` : null;
+}
+
 export function leerBorrador() {
   try {
     const crudo = localStorage.getItem(CLAVE_BORRADOR);
