@@ -3,6 +3,8 @@
 export const CLAVE_BORRADOR = "emiliacordoba-borrador-v1";
 
 export const PALETAS = {
+  violeta:   { nombre: "Violeta profundo",  colores: { fondo: "#F4F1F7", superficie: "#FFFFFF", texto: "#1D1726", acento: "#5B2A86", oscuro: "#23123A" } },
+  imponente: { nombre: "Violeta intenso",   colores: { fondo: "#F6F3F9", superficie: "#FFFFFF", texto: "#1A1222", acento: "#7A2EB8", oscuro: "#3B1260" } },
   sierra:  { nombre: "Sierra (terracota)", colores: { fondo: "#F3EEE5", superficie: "#FFFCF6", texto: "#24201B", acento: "#A9502B", oscuro: "#2A2722" } },
   canada:  { nombre: "Cañada (verde)",     colores: { fondo: "#EEF0E9", superficie: "#FBFCF8", texto: "#1E2520", acento: "#3E6A4C", oscuro: "#1C2820" } },
   tinta:   { nombre: "Tinta (azul)",       colores: { fondo: "#F7F6F2", superficie: "#FFFFFF", texto: "#16181D", acento: "#2D4A8A", oscuro: "#14171D" } },
